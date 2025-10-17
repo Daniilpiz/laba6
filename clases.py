@@ -3,12 +3,27 @@ class MatrixGraph:
     def __init__(self, matrix):
         self.matrix = matrix
         self.size = len(matrix)
+
+    def get_matrix(self):
+        return self.matrix
     
-    def display(self):
-        print("Матрица смежности:")
+    def __str__(self):
+        return "\n".join(" ".join(map(str, row)) for row in self.matrix)
+
+    def display(self, return_string=False):
+        output = "Матрица смежности:\n"
         for row in self.matrix:
-            print(row)
-        print("")
+            output += " ".join(map(str, row)) + "\n"
+    
+        if return_string:
+            return output
+        else:
+            print(output)
+            return None
+
+    def get_matrix(self):
+        return self.matrix
+
     
     def identify_vertices(self, v1, v2):
         """Отождествление вершин v1 и v2"""

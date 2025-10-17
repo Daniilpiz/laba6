@@ -20,8 +20,8 @@ def generator_smezh(razm):
     return matr_sm.tolist()
 
 def main():
-    G1 = generator_smezh(10)#int(input("Введите размер первой матрицы:\n")))
-    G2 = generator_smezh(5)#int(input("Введите размер второй матрицы:\n")))
+    G1 = generator_smezh(3)#int(input("Введите размер первой матрицы:\n")))
+    G2 = generator_smezh(4)#int(input("Введите размер второй матрицы:\n")))
     G1 = cl.MatrixGraph(matrix=G1)
     G2 = cl.MatrixGraph(matrix=G2)
 #для 1 матрицы
@@ -32,26 +32,32 @@ def main():
     v1_1 = int(input("введите первую вершину для слияния:"))
     v1_2 = int(input("введите вторую вершину для слияния:"))
 
-    G1.display()
+
 
     G1.identify_vertices(v1_1, v1_2 )
+
+    print()
     v1_3 = int(input("введите вершину для разрыва:"))
     G1.split_vertex( v1_3)
    
-    G1.display()
+    print(G1)
+
+
+    G1.contract_edge()
 #для 2 матрицы
     G2.display()
 
     v2_1 = int(input("введите первую вершину для слияния:"))
     v2_2 = int(input("введите вторую вершину для слияния:"))
-    G1.identify_vertices(v2_1, v2_2 )
+    G2.identify_vertices_edge(v2_1, v2_2)
+    print(G2.get_matrix())
 
-    G2.display()
+    print(G2.get_matrix())
 
     v2_3 = int(input("введите вершину для разрыва:"))
     G1.split_vertex(v2_3)
 
-    G2.display()
+    print(G2.get_matrix())
 
 if __name__ == "__main__":
     main()
