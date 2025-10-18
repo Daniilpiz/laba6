@@ -31,7 +31,7 @@ def main():
     print(G1.identify_vertices(v1_1, v1_2))
 
     v1_3 = int(input("введите вершину для разрыва:"))
-    print(G1.split_vertex( v1_3))
+    print(G1.split_vertex(v1_3))
    
     v1_4 = int(input("введите первую вершину для cтягивания ребра:"))
     v1_5 = int(input("введите вторую вершину для стягивания ребра:"))
