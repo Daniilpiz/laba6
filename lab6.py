@@ -1,11 +1,8 @@
 import random as rd
 import numpy as np
 
-
-
 import clases as cl
 
-    
 
 def generator_smezh(razm):
     matr_sm = np.array([abs(rd.randint(-1000, 1000))%2 for _ in range(razm) for _ in range(razm)]).reshape(razm, razm)
@@ -31,33 +28,34 @@ def main():
 
     v1_1 = int(input("введите первую вершину для слияния:"))
     v1_2 = int(input("введите вторую вершину для слияния:"))
+    print(G1.identify_vertices(v1_1, v1_2))
 
-
-
-    G1.identify_vertices(v1_1, v1_2 )
-
-    print()
     v1_3 = int(input("введите вершину для разрыва:"))
-    G1.split_vertex( v1_3)
+    print(G1.split_vertex( v1_3))
    
-    print(G1)
+    v1_4 = int(input("введите первую вершину для cтягивания ребра:"))
+    v1_5 = int(input("введите вторую вершину для стягивания ребра:"))
+    print(G1.contract_edge(v1_4, v1_5))
+    
+    
 
 
-    G1.contract_edge()
+
 #для 2 матрицы
     G2.display()
 
     v2_1 = int(input("введите первую вершину для слияния:"))
     v2_2 = int(input("введите вторую вершину для слияния:"))
-    G2.identify_vertices_edge(v2_1, v2_2)
-    print(G2.get_matrix())
-
-    print(G2.get_matrix())
+    print(G2.identify_vertices(v2_1, v2_2))
 
     v2_3 = int(input("введите вершину для разрыва:"))
-    G1.split_vertex(v2_3)
+    print(G2.split_vertex(v2_3))
 
     print(G2.get_matrix())
+
+    v2_4 = int(input("введите первую вершину для cтягивания ребра:"))
+    v2_5 = int(input("введите вторую вершину для стягивания ребра:"))
+    print(G2.contract_edge(v2_4, v2_5))
 
 if __name__ == "__main__":
     main()
