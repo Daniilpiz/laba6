@@ -17,6 +17,12 @@ def generator_smezh(razm):
     return matr_sm.tolist()
 
 
+def vvod():
+    try:
+        var = int(input("Выберите матричное представление графа(ввод 1) или списковое(ввод 2)"))
+        return var
+    except: print("Введите число")
+
 def matrix_to_adj_list_functional(matrix):
     """Функциональный стиль преобразования"""
     return [
@@ -98,6 +104,15 @@ def lists(spisok):
 if __name__ == "__main__":
     G1 = generator_smezh(3)#int(input("Введите размер первой матрицы:\n")))
     G2 = generator_smezh(4)#int(input("Введите размер второй матрицы:\n")))
-    matrix(G1, G2)
-    adj_list = matrix_to_adj_list_functional(G1)
-    lists(adj_list)
+
+    adj_list1 = matrix_to_adj_list_functional(G1)
+    adj_list2 = matrix_to_adj_list_functional(G2)
+    
+    var = vvod()
+
+
+    if var == 1:
+        matrix(G1, G2)
+    if var == 2: 
+        lists(adj_list1)
+        lists(adj_list2)
