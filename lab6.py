@@ -36,8 +36,6 @@ def matrix(G1, G2):
     G2 = cl.MatrixGraph(matrix=G2)
 
 
-
-
 #для 1 матрицы
     print(f"{G1}\n")
 
@@ -58,21 +56,21 @@ def matrix(G1, G2):
     # print(f"{G1}\n")
     
 #для 2 матрицы
-    print(G2)
+    # print(G2)
 
-    v2_1 = int(input("введите первую вершину для слияния:"))
-    v2_2 = int(input("введите вторую вершину для слияния:"))
-    G2 = G2.identify_vertices(v2_1, v2_2)
-    print(G2)
+    # v2_1 = int(input("введите первую вершину для слияния:"))
+    # v2_2 = int(input("введите вторую вершину для слияния:"))
+    # G2 = G2.identify_vertices(v2_1, v2_2)
+    # print(G2)
 
-    v2_3 = int(input("введите вершину для разрыва:"))
-    G2 = G2.split_vertex(v2_3)
-    print(G2)
+    # v2_3 = int(input("введите вершину для разрыва:"))
+    # G2 = G2.split_vertex(v2_3)
+    # print(G2)
 
-    v2_4 = int(input("введите первую вершину для cтягивания ребра:"))
-    v2_5 = int(input("введите вторую вершину для стягивания ребра:"))
-    G2 = G2.contract_edge(v2_4, v2_5)
-    print(G2)
+    # v2_4 = int(input("введите первую вершину для cтягивания ребра:"))
+    # v2_5 = int(input("введите вторую вершину для стягивания ребра:"))
+    # G2 = G2.contract_edge(v2_4, v2_5)
+    # print(G2)
 
     # print(G2)
 
@@ -115,4 +113,4 @@ if __name__ == "__main__":
         matrix(G1, G2)
     if var == 2: 
         lists(adj_list1)
-        lists(adj_list2)
+        # lists(adj_list2)
