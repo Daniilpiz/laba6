@@ -3,6 +3,51 @@ class MatrixGraph:
     def __init__(self, matrix):
         self.matrix = matrix
         self.size = len(matrix)
+    def cartesian_product(self, other):
+        """
+        Строит декартово произведение текущего графа (self) и графа other.
+        
+        Параметры:
+            other (MatrixGraph): второй граф для произведения
+        
+        Возвращает:
+            MatrixGraph: новый граф — декартово произведение
+        """
+        A = self.matrix
+        B = other.matrix
+        n = self.size      # Размер первого графа
+        m = other.size     # Размер второго графа
+
+
+        # Размер результирующей матрицы: n*m × n*m
+        result_size = n * m
+        result = [[0] * result_size for _ in range(result_size)]
+
+
+        # Проходим по всем вершинам произведения (i, j)
+        for i in range(n):
+            for j in range(m):
+                # Глобальный индекс вершины (i, j) в новой матрице
+                idx1 = i * m + j
+
+
+                # Рёбра по первому графу: (i,j) ↔ (k,j) если A[i][k] == 1
+                for k in range(n):
+                    if A[i][k]:
+                        idx2 = k * m + j
+                        result[idx1][idx2] = 1
+                        result[idx2][idx1] = 1  # Симметрия для неориентированного графа
+
+
+                # Рёбра по второму графу: (i,j) ↔ (i,l) если B[j][l] == 1
+                for l in range(m):
+                    if B[j][l]:
+                        idx2 = i * m + l
+                        result[idx1][idx2] = 1
+                        result[idx2][idx1] = 1  # Симметрия
+
+
+        return MatrixGraph(result)
     
     def __str__(self):
         return "\n".join(" ".join(map(str, row)) for row in self.matrix)
