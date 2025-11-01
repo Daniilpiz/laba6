@@ -23,7 +23,7 @@ def vvod():
         return var
     except: print("Введите число")
 
-def matrix_to_adj_list_functional(matrix):
+def matrix_to_adj_list(matrix):
     """Функциональный стиль преобразования"""
     return [
         [j for j in range(len(matrix)) if matrix[i][j] != 0]
@@ -115,8 +115,8 @@ if __name__ == "__main__":
     G1 = generator_smezh(int(input("Введите размер первого графа:\n")))
     G2 = generator_smezh(int(input("Введите размер второго графа:\n")))
 
-    adj_list1 = matrix_to_adj_list_functional(G1)
-    adj_list2 = matrix_to_adj_list_functional(G2)
+    adj_list1 = matrix_to_adj_list(G1)
+    adj_list2 = matrix_to_adj_list(G2)
     
     var = vvod()
 

@@ -350,7 +350,7 @@ class AdjacencyGraph:
             return None
         
         # Создаем копию для безопасной модификации
-        temp_graph = self.copy()
+        temp_graph = self
         
         # Определяем, какую вершину сохраняем (v1), какую удаляем (v2)
         keep_vertex = min(v1, v2)
