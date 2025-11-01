@@ -35,9 +35,14 @@ def matrix(G1, G2):
     G1 = cl.MatrixGraph(matrix=G1)
     G2 = cl.MatrixGraph(matrix=G2)
 
+    G1_2 = G1
+    G2_2 = G2
+
+
 
 #для 1 матрицы
     print(f"{G1}\n")
+    print(f"{G2}\n")
 
     v1_1 = int(input("введите первую вершину для слияния:"))
     v1_2 = int(input("введите вторую вершину для слияния:"))
@@ -72,8 +77,14 @@ def matrix(G1, G2):
     G2 = G2.contract_edge(v2_4, v2_5)
     print(G2)
 
-    G3 = G1.cartesian_product(G2)
-    print(f"декартово произведение графов:\n{G3}")
+
+
+    G = G1_2.cartesian_product(G2_2)
+    print(f"декартово произведение графов:\n{G}\n\n")
+
+    print(f"{G1}\n {G1_2}\n")
+    print(f"{G2}\n {G2_2}\n")
+
 
 def lists(spisok):
     spisok = cl.AdjacencyGraph(spisok)
@@ -101,8 +112,8 @@ def lists(spisok):
     
 
 if __name__ == "__main__":
-    G1 = generator_smezh(3)#int(input("Введите размер первой матрицы:\n")))
-    G2 = generator_smezh(4)#int(input("Введите размер второй матрицы:\n")))
+    G1 = generator_smezh(int(input("Введите размер первого графа:\n")))
+    G2 = generator_smezh(int(input("Введите размер второго графа:\n")))
 
     adj_list1 = matrix_to_adj_list_functional(G1)
     adj_list2 = matrix_to_adj_list_functional(G2)

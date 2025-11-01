@@ -3,6 +3,7 @@ class MatrixGraph:
     def __init__(self, matrix):
         self.matrix = matrix
         self.size = len(matrix)
+
     def cartesian_product(self, other):
         """
         Строит декартово произведение текущего графа (self) и графа other.
@@ -84,70 +85,58 @@ class MatrixGraph:
         
         return MatrixGraph(new_matrix)
     
-    """ def contract_edge(self, v1, v2):
-        if v1 == v2 or v1 >= self.size or v2 >= self.size or self.matrix[v1][v2] == 0:
-            print("Ошибка: между вершинами нет ребра или неверные номера")
+   
+    
+    def contract_edge(self, v1, v2):
+        """Стягивание ребра между v1 и v2"""
+        if v1 == v2 or v1 >= self.size or v2 >= self.size:
+            print("Ошибка: неверные номера вершин")
+            return None
+        
+        if self.matrix[v1][v2] == 0:
+            print("Ошибка: между вершинами нет ребра")
             return None
         
         # Создаем новую матрицу без вершины v2
         new_size = self.size - 1
         new_matrix = [[0] * new_size for _ in range(new_size)]
         
-        # Копируем данные, объединяя вершины v1 и v2
-        new_i, new_j = 0, 0
+        # Индексы для новой матрицы
+        new_i = 0
         for i in range(self.size):
-            if i == v2:
+            if i == v2:  # Пропускаем вершину v2
                 continue
+                
             new_j = 0
             for j in range(self.size):
-                if j == v2:
+                if j == v2:  # Пропускаем вершину v2
                     continue
                 
-                if i == v1 or j == v1:
-                    # Объединяем связи вершин v1 и v2
-                    value = self.matrix[i][j] or self.matrix[i if i != v1 else v2][j if j != v1 else v2]
+                # Определяем индексы в новом графе
+                current_i = new_i
+                current_j = new_j
+                
+                # Если это объединяемая вершина v1 в новой матрице
+                if i == v1:
+                    # Объединяем связи: берем ИЛИ связей v1 и v2
+                    value = self.matrix[v1][j] or self.matrix[v2][j]
+                elif j == v1:
+                    # Объединяем связи: берем ИЛИ связей i с v1 и i с v2
+                    value = self.matrix[i][v1] or self.matrix[i][v2]
                 else:
+                    # Просто копируем значение
                     value = self.matrix[i][j]
+                
+                # Убираем петлю (связь вершины с самой собой)
+                if current_i == current_j:
+                    value = 0
                 
                 new_matrix[new_i][new_j] = value
                 new_j += 1
+                
             new_i += 1
         
         return MatrixGraph(new_matrix)
-
-
-        """
-    
-    def contract_edge(self, v1, v2):
-        if v1 == v2 or v1 >= self.size or v2 >= self.size or self.matrix[v1][v2] == 0:
-            print("Ошибка: между вершинами нет ребра или неверные номера")
-            None
-
-        new_size = self.size - 1
-        new_matrix = [[0] * new_size for _ in range(new_size)]
-
-
-    # Отображение старых индексов в новые (исключая v2)
-        def map_index(idx):
-            return idx if idx < v2 else idx - 1
-
-    # Проходим по всем парам вершин, кроме v2
-        for i in range(self.size):
-            if i == v2:
-                continue
-            for j in range(self.size):
-                if j == v2:
-                    continue
-
-            # Если одна из вершин — v1, объединяем связи v1 и v2
-            if i == v1 or j == v1:
-                # Суммируем связи (для невзвешенного графа берём min(1, ...))
-                total = self.matrix[i][j] + self.matrix[v2][j] if j != v1 else \
-                         self.matrix[i][v2] + self.matrix[v2][v2]
-                new_matrix[map_index(i)][map_index(j)] = min(1, total)
-            else:
-                new_matrix[map_index(i)][map_index(j)] = self.matrix[i][j]
-
         return MatrixGraph(new_matrix)
 
     def split_vertex(self, v):
@@ -187,6 +176,73 @@ class MatrixGraph:
             # Убираем связь у исходной вершины
             new_matrix[v][neighbor] = 0
             new_matrix[neighbor][v] = 0
+        
+        return MatrixGraph(new_matrix)
+    
+    def union(self, other):
+        """
+        Объединение графов G1 ∪ G2
+        Вершины нумеруются последовательно, сохраняются все ребра из обоих графов
+        """
+        if not isinstance(other, MatrixGraph):
+            raise ValueError("Можно объединять только с MatrixGraph")
+        
+        new_size = self.size + other.size
+        new_matrix = [[0] * new_size for _ in range(new_size)]
+        
+        # Копируем первый граф в левый верхний угол
+        for i in range(self.size):
+            for j in range(self.size):
+                new_matrix[i][j] = self.matrix[i][j]
+        
+        # Копируем второй граф в правый нижний угол со смещением
+        for i in range(other.size):
+            for j in range(other.size):
+                new_matrix[self.size + i][self.size + j] = other.matrix[i][j]
+        
+        return MatrixGraph(new_matrix)
+    
+
+
+    def intersection(self, other):
+        """
+        Пересечение графов G1 ∩ G2
+        Только общие ребра, которые есть в обоих графах
+        Графы должны быть одинакового размера
+        """
+        if not isinstance(other, MatrixGraph):
+            raise ValueError("Можно пересекать только с MatrixGraph")
+        
+        if self.size != other.size:
+            raise ValueError("Графы должны быть одинакового размера для пересечения")
+        
+        new_matrix = [[0] * self.size for _ in range(self.size)]
+        
+        for i in range(self.size):
+            for j in range(self.size):
+                # Ребро есть только если оно есть в обоих графах
+                new_matrix[i][j] = 1 if self.matrix[i][j] == 1 and other.matrix[i][j] == 1 else 0
+        
+        return MatrixGraph(new_matrix)
+    
+
+    def ring_sum(self, other):
+        """
+        Кольцевая сумма G1 ⊕ G2
+        Объединение графов без общих ребер (исключающее ИЛИ)
+        """
+        if not isinstance(other, MatrixGraph):
+            raise ValueError("Можно выполнять кольцевую сумму только с MatrixGraph")
+        
+        if self.size != other.size:
+            raise ValueError("Графы должны быть одинакового размера для кольцевой суммы")
+        
+        new_matrix = [[0] * self.size for _ in range(self.size)]
+        
+        for i in range(self.size):
+            for j in range(self.size):
+                # Ребро есть если оно есть только в одном из графов (XOR)
+                new_matrix[i][j] = 1 if self.matrix[i][j] != other.matrix[i][j] else 0
         
         return MatrixGraph(new_matrix)
     
