@@ -336,64 +336,66 @@ class AdjacencyGraph:
     #     return AdjacencyGraph(new_adj_list)
 
 
+    # 
+    
+
     def contract_edge(self, v1, v2):
-    # Базовые проверки
+        """Стягивание ребра между v1 и v2"""
         if v1 == v2 or v1 >= self.size or v2 >= self.size:
             print("Ошибка: неверные номера вершин")
             return None
+        
         if v2 not in self.adj_list[v1]:
             print("Ошибка: между вершинами нет ребра")
             return None
-
-        new_size = self.size - 1
-        new_adj_list = [[] for _ in range(new_size)]  # Теперь список пустых списков
-
-    # Создаём карту пересчёта индексов (старый → новый)
-        index_map = {}
-        for old_idx in range(self.size):
-            if old_idx == v2:
-                continue  # v2 удаляется
-            index_map[old_idx] = old_idx if old_idx < v2 else old_idx - 1
-
-    # Обрабатываем каждую вершину (кроме v2)
-        for old_i in range(self.size):
-            if old_i == v2:
+        
+        # Создаем копию для безопасной модификации
+        temp_graph = self.copy()
+        
+        # Определяем, какую вершину сохраняем (v1), какую удаляем (v2)
+        keep_vertex = min(v1, v2)
+        remove_vertex = max(v1, v2)
+        
+        new_adj_list = []
+        
+        # Строим новый список смежности
+        for i in range(temp_graph.size):
+            if i == remove_vertex:  # Пропускаем удаляемую вершину
                 continue
-
-            new_i = index_map[old_i]
-            neighbors = []
-
-        for old_neighbor in self.adj_list[old_i]:
-            # Пропускаем ссылки на v2 (они будут заменены на v1)
-            if old_neighbor == v2:
-                mapped = index_map[v1]  # v1 в новой нумерации
-            else:
-                # Пересчитываем индекс соседа
-                if old_neighbor not in index_map:
-                    continue  # Пропускаем удалённые вершины
-                mapped = index_map[old_neighbor]
-
-            neighbors.append(mapped)
-
-        # Убираем дубликаты, сортируем, сохраняем
-        new_adj_list[new_i] = sorted(list(set(neighbors)))
-
-    # Объединяем соседей v1 и v2
-        v1_new = index_map[v1]
-        v1_neighbors = set(new_adj_list[v1_new])  # Теперь безопасно: new_adj_list[v1_new] — список
-
-        for old_neighbor in self.adj_list[v2]:
-            if old_neighbor == v2 or old_neighbor == v1:
-                continue
-
-            if old_neighbor not in index_map:
-                continue  # Пропускаем удалённые
-
-            mapped = index_map[old_neighbor]
-            v1_neighbors.add(mapped)
-
-        new_adj_list[v1_new] = sorted(list(v1_neighbors))
-
+                
+            new_neighbors = []
+            for neighbor in temp_graph.adj_list[i]:
+                if neighbor == remove_vertex:
+                    # Заменяем ссылку на удаляемую вершину ссылкой на сохраняемую
+                    if keep_vertex not in new_neighbors and keep_vertex != i:
+                        new_neighbors.append(keep_vertex)
+                elif neighbor > remove_vertex:
+                    # Корректируем индексы вершин, которые были после удаляемой
+                    new_neighbors.append(neighbor - 1)
+                else:
+                    # Сохраняем без изменений
+                    new_neighbors.append(neighbor)
+            
+            new_adj_list.append(sorted(list(set(new_neighbors))))  # Убираем дубликаты и сортируем
+        
+        # Объединяем списки смежности для сохраняемой вершины
+        # Добавляем всех соседей удаляемой вершины (кроме самой себя и сохраняемой)
+        keep_index = keep_vertex if keep_vertex < remove_vertex else keep_vertex - 1
+        
+        additional_neighbors = []
+        for neighbor in temp_graph.adj_list[remove_vertex]:
+            if neighbor != remove_vertex and neighbor != keep_vertex:
+                if neighbor > remove_vertex:
+                    adjusted_neighbor = neighbor - 1
+                else:
+                    adjusted_neighbor = neighbor
+                if adjusted_neighbor not in new_adj_list[keep_index]:
+                    additional_neighbors.append(adjusted_neighbor)
+        
+        # Объединяем и убираем дубликаты
+        if additional_neighbors:
+            new_adj_list[keep_index] = sorted(list(set(new_adj_list[keep_index] + additional_neighbors)))
+        
         return AdjacencyGraph(new_adj_list)
 
 
