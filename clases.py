@@ -181,7 +181,7 @@ class MatrixGraph:
     
     def union(self, other):
         """
-        Объединение графов G1 ∪ G2
+        Объединение графов G1 И G2
         Вершины нумеруются последовательно, сохраняются все ребра из обоих графов
         """
         if not isinstance(other, MatrixGraph):

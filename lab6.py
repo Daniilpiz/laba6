@@ -82,9 +82,29 @@ def matrix(G1, G2):
     G = G1_2.cartesian_product(G2_2)
     print(f"декартово произведение графов:\n{G}\n\n")
 
-    print(f"{G1}\n {G1_2}\n")
-    print(f"{G2}\n {G2_2}\n")
+    print(f"{G1}\n\n{G2}\n")
+    print(f"{G1_2}\n\n{G2_2}\n")
 
+
+def matrix_1(G3, G4):
+    G3 = cl.MatrixGraph(G3)
+    G4 = cl.MatrixGraph(G4)
+
+    print(f"{G3}\n\n{G4}")
+    
+    var = int(input("Выберите объединение графов(1), пересечение графов(2), кольцевая сумма(3)"))
+    
+
+
+    if var ==1:
+        G3 = G3.union(G4)
+        print(f"{G3}")
+    if var ==2:
+        G3 = G3.intersection(G4)
+        print(f"{G3}")
+    if var == 3:
+        G3 = G3.ring_sum(G3)
+        print(f"{G3}")
 
 def lists(spisok):
     spisok = cl.AdjacencyGraph(spisok)
@@ -112,17 +132,21 @@ def lists(spisok):
     
 
 if __name__ == "__main__":
-    G1 = generator_smezh(int(input("Введите размер первого графа:\n")))
-    G2 = generator_smezh(int(input("Введите размер второго графа:\n")))
+    G1 = generator_smezh(int(input("Введите кол-во вершин первого графа:\n")))
+    G2 = generator_smezh(int(input("Введите кол-во вершин второго графа:\n")))
 
     adj_list1 = matrix_to_adj_list(G1)
     adj_list2 = matrix_to_adj_list(G2)
+
+    G3 = generator_smezh(int(input("Введите кол-во вершин третьего графа:\n")))
+    G4 = generator_smezh(int(input("Введите кол-во вершин четвёртого графа:\n")))
     
     var = vvod()
 
 
     if var == 1:
-        matrix(G1, G2)
+        # matrix(G1, G2)
+        matrix_1(G3, G4)
     if var == 2: 
         lists(adj_list1)
         lists(adj_list2)
